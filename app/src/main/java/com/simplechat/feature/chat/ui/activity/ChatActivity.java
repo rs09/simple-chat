@@ -16,6 +16,7 @@ import com.simplechat.feature.chat.model.ChatMessage;
 import com.simplechat.feature.chat.ui.adapter.ChatAdapter;
 import com.simplechat.feature.chat.viewmodel.ChatViewModel;
 import io.reactivex.disposables.CompositeDisposable;
+import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -62,7 +63,7 @@ public class ChatActivity extends AppCompatActivity {
   }
 
   private void setupRecyclerViewAndAdapter() {
-    adapter = new ChatAdapter(this, chatViewModel.getChatMessages());
+    adapter = new ChatAdapter(this, new ArrayList<>(chatViewModel.getChatMessages()));
 
     messagesRecyclerView.setAdapter(adapter);
     messagesRecyclerView.setHasFixedSize(true);
@@ -76,6 +77,10 @@ public class ChatActivity extends AppCompatActivity {
 
   private void addMessage(final ChatMessage message) {
     adapter.addMessage(message);
+    scrollToEnd();
+  }
+
+  private void scrollToEnd() {
     messagesRecyclerView.getLayoutManager().scrollToPosition(adapter.getItemCount() - 1);
   }
 

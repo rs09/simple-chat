@@ -23,17 +23,20 @@ public class ChatViewModel {
         : savedInstanceState.getParcelableArrayList(EXTRA_CHAT_MESSAGES);
   }
 
-  public void sendMessage(final ChatMessage message) {
+  public void sendMessage(final ChatMessage sentMessage) {
     /*
     Sending back a received message with the same text with a delay of 1 second.
      */
-    final ChatMessage newMessage =
-        ChatMessage.newInstanceForReceivedTextMessage(message.getMessageBody());
+    final ChatMessage receivedMessage =
+        ChatMessage.newInstanceForReceivedTextMessage(sentMessage.getMessageBody());
 
-    Observable.just(newMessage)
+    Observable.just(receivedMessage)
         .delay(1, TimeUnit.SECONDS)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(chatMessageSubject::onNext);
+
+    chatMessages.add(sentMessage);
+    chatMessages.add(receivedMessage);
   }
 
   public void saveInstanceState(final Bundle outState) {
